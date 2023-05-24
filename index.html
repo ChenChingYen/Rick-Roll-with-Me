@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rick Roll with Me</title>
+    <meta meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" href="rick_icon.png">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        #flip-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        #flip-container .flipper {
+            width: inherit;
+            height: inherit;
+            transform-style: preserve-3d;
+            position: absolute;
+        }
+
+        #flip-container .front,
+        #flip-container .back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+        }
+
+        img{
+            height: 80%;
+        }
+
+        #flip-container .back {
+            transform: rotateY(180deg);
+        }
+
+        #flip-container.flipped .flipper {
+            transform: rotateY(180deg);
+        }
+
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modal-content {
+            background-color: #fff;
+            padding: 20px;
+        }
+
+        #replay-button {
+            display: block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="flip-container">
+        <div class="flipper">
+            <div class="front">
+                <img src="rick_himself_front.jpg" alt="">
+            </div>
+            <div class="back">
+                <img src="rick_himself_back.jpg" alt="">
+            </div>
+        </div>
+    </div>
+
+    <div id="modal">
+        <div id="modal-content">
+            <h2>Well Done Rick Roller!</h2>
+            <button id="replay-button">Replay</button>
+        </div>
+    </div>
+
+    <audio id="audio" src="rick_roll.mp3"></audio>
+
+    <script>
+        var flipContainer = document.getElementById('flip-container');
+        var audio = document.getElementById('audio');
+        var modal = document.getElementById('modal');
+        var replayButton = document.getElementById('replay-button');
+        var timer;
+
+        flipContainer.addEventListener('click', function () {
+            flipContainer.classList.toggle('flipped');
+            if (audio.paused) {audio.play();}
+        });
+
+        flipContainer.addEventListener('mousedown', function () {
+            clearTimeout(timer);
+        });
+
+        flipContainer.addEventListener('mouseup', function () {
+            timer = setTimeout(function () {
+                if (!audio.paused) {
+                    audio.pause();
+                }
+            }, 400);
+        });
+
+        audio.addEventListener('ended', function () {
+            modal.style.display = 'flex';
+        });
+
+        replayButton.addEventListener('click', function () {
+            modal.style.display = 'none';
+            audio.currentTime = 0;
+            audio.play();
+        });
+    </script>
+</body>
+</html>
